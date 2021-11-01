@@ -77,6 +77,7 @@ func heapSort(nums[]int, len int) {
 	heapSort(nums, len - 1)
 }
 
+
 func main() {
 	data := []int{3,7,1,15,8,4,9,23}
 	heapInit(data)
