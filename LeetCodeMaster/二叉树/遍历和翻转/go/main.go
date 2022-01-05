@@ -304,6 +304,30 @@ func getNodeCount(root *TreeNode) int {
 	return 1 + getNodeCount(root.Left) + getNodeCount(root.Right)
 }
 
+// 是否是平衡的, 返回二叉树的高度，如果二叉树已经不平衡了则返回-1
+// 如果二叉树的左右子树高度之差的绝对值小于1则是平衡的，计算高度，使用后序
+func getHeight(cur *TreeNode) int {
+	if cur == nil {
+		return 0
+	}
+
+	heightLeft := getHeight(cur.Left)
+	if heightLeft == -1 {
+		return -1
+	}
+
+	heightRight := getHeight(cur.Right)
+	if heightRight == -1 {
+		return -1
+	}
+
+	if math.Abs(heightLeft - heightRight) > 1 {
+		return -1
+	}
+
+	return math.Max(heightLeft, heightRight) + 1
+}
+
 // 合并两个二叉树,合并后二叉树的节点为两个节点数值之和
 func binaryCombine(root1 *TreeNode, root2 *TreeNode) *TreeNode {
 	if root1 == nil && root2 == nil {
