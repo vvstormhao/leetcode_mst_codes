@@ -378,6 +378,41 @@ func binaryCombine(root1 *TreeNode, root2 *TreeNode) *TreeNode {
 	return node
 }
 
+// 合并两个二叉树
+func MergeTrees(t1 *TreeNode, t2 *TreeNode) *TreeNode {
+	// 退出条件，一方为空则返回另一方
+	if t1 == nil {
+		return t2
+	}
+
+	if t2 == nil {
+		return t1
+	}
+
+	t1.Val += t2.Val
+	t1.Left = MergeTrees(t1.Left, t2.Left)
+	t1.Right = MergeTrees(t1.Right, t2.Right)
+	return t1
+}
+
+
+// 获取所有左叶子之和
+func leftLeafSum(node *TreeNode) int {
+	if node == nil {
+		return 0
+	}
+
+	leftSum := leftLeafSum(node.Left)
+	rightSum := leftLeafSum(node.Right)
+
+	var midVal int
+	if node.Left != nil && node.Left.Left == nil && node.Left.Right == nil {
+		midVal =  node.Left.Val
+	}
+
+	return mid + leftSum + rightSum
+}
+
 // 判断是否为二叉搜索树
 // 二叉搜索树的最小绝对值差
 // 获取众数
