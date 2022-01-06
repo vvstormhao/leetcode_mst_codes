@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"math"
+	"strconv"
 )
 
 /*
@@ -321,11 +323,29 @@ func getHeight(cur *TreeNode) int {
 		return -1
 	}
 
-	if math.Abs(heightLeft - heightRight) > 1 {
+	if int(math.Abs(float64(heightLeft - heightRight))) > 1 {
 		return -1
 	}
 
-	return math.Max(heightLeft, heightRight) + 1
+	return int(math.Max(float64(heightLeft), float64(heightRight))) + 1
+}
+
+// 找出二叉树的全部路径
+var paths []string
+func findAllPath(node *TreeNode, path string) {
+	path += strconv.Itoa(node.Val)
+	if node.Left == nil && node.Right == nil {
+		paths = append(paths, path)
+		return
+	}
+
+	if node.Left != nil {
+		findAllPath(node.Left, path + "->")
+	}
+
+	if node.Right != nil {
+		findAllPath(node.Right, path + "->")
+	}
 }
 
 // 合并两个二叉树,合并后二叉树的节点为两个节点数值之和
@@ -383,7 +403,7 @@ func main() {
 
 	//isMir := IsMirror(tree1, treeMirro)
 	//fmt.Printf("isMirr %v\n",isMir)
-
+/*
 	maxDepth := getMaxDepth(tree1)
 	fmt.Printf("MaxDepth %d\n", maxDepth)
 
@@ -395,4 +415,7 @@ func main() {
 
 	newBinary := binaryCombine(tree3, tree3)
 	PrintOrderLevel(newBinary)
+*/
+	findAllPath(tree1, "")
+	fmt.Printf("paths %v\n", paths)
 }
