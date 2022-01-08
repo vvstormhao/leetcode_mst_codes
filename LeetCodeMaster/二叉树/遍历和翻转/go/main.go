@@ -410,7 +410,48 @@ func leftLeafSum(node *TreeNode) int {
 		midVal =  node.Left.Val
 	}
 
-	return mid + leftSum + rightSum
+	return midVal + leftSum + rightSum
+}
+
+func searchLevel(node *TreeNode) [][]int{
+	if node == nil {
+		return nil
+	}
+
+	var levelData []int // 缓存每一层的数据
+	var allData [][]int // 缓存全部层级的数据
+	var deque []*TreeNode
+	var popIndex int
+
+	deque = append(deque, node)
+	for len(deque) - popIndex > 0 {
+		size := len(deque) - popIndex
+		for i := 0; i < size; i++ {
+			v := deque[popIndex]
+			popIndex++
+
+			levelData = append(levelData, v.Val)
+			if v.Left != nil {
+				deque = append(deque, v.Left)
+			}
+	
+			if v.Right != nil {
+				deque = append(deque, v.Right)
+			}
+		}
+
+		allData = append(allData, levelData)
+		levelData = []int{}
+	}
+
+	return allData
+}
+// 找树左下角的值
+func getLeftVal(node *TreeNode) int {
+	// 使用层序遍历
+	levelData := searchLevel(node)
+	size := len(levelData)
+	return levelData[size-1][0]
 }
 
 // 判断是否为二叉搜索树
@@ -453,4 +494,7 @@ func main() {
 */
 	findAllPath(tree1, "")
 	fmt.Printf("paths %v\n", paths)
+
+	val := getLeftVal(bst1)
+	fmt.Printf("left val %v\n", val)
 }
