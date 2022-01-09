@@ -454,6 +454,72 @@ func getLeftVal(node *TreeNode) int {
 	return levelData[size-1][0]
 }
 
+// 路径总和
+func HasPathSum(node *TreeNode, target int) bool {
+	if node != nil && target <= 0 {
+		return false
+	}
+
+	if node == nil {
+		if target == 0 {
+			return true
+		} else {
+			return false
+		}
+	}
+
+	target = target - node.Val
+	has := HasPathSum(node.Left, target)
+	if has {
+		return has
+	}
+
+	has = HasPathSum(node.Right, target)
+	if has {
+		return has
+	}
+	
+	return false
+}
+
+// 从中序和后序，构造二叉树，给出前序
+func CreateBinary(inOrder []int, postOrder []int) *TreeNode {
+	inSize := len(inOrder)
+	postSize := len(postOrder)
+
+	if inSize == 0 || postSize == 0 {
+		return nil
+	}
+
+	rootVal := postOrder[postSize - 1]
+	rootNode := &TreeNode{
+		Val:rootVal,
+	}
+
+	var rootPos int
+	for pos, val := range inOrder {
+		if val == rootVal {
+			rootPos = pos
+			break
+		}
+	}
+
+	leftInOrder := inOrder[:rootPos]
+	fmt.Printf("inOrder %v     rootPos %d,  leftInOrder %v\n", inOrder, rootPos, leftInOrder)
+	rightInOrder := inOrder[rootPos+1:]
+	fmt.Printf("inOrder %v     rootPos %d,  rightInOrder %v\n", inOrder, rootPos, rightInOrder)
+
+	leftPostOrder := postOrder[:rootPos]
+	fmt.Printf("postOrder %v     rootPos %d,  leftPostOrder %v\n",postOrder, rootPos, leftPostOrder)
+	postLength := inSize - rootPos - 1
+	rightPostOrder:= postOrder[rootPos:rootPos + postLength]
+	fmt.Printf("postOrder %v     postLength %d,  rightPostOrder %v\n",postOrder, postLength, rightPostOrder)
+
+	rootNode.Left = CreateBinary(leftInOrder, leftPostOrder)
+	rootNode.Right = CreateBinary(rightInOrder, rightPostOrder)
+	return rootNode
+}
+
 // 判断是否为二叉搜索树
 // 二叉搜索树的最小绝对值差
 // 获取众数
@@ -497,4 +563,13 @@ func main() {
 
 	val := getLeftVal(bst1)
 	fmt.Printf("left val %v\n", val)
+
+	has := HasPathSum(tree1, 22)
+	fmt.Printf("has %v\n", has)
+
+	inOrder := []int{9,3,15,20,7}
+	postOrder := []int{9,15,7,20,3}
+
+	tree := CreateBinary(inOrder, postOrder)
+	PrintOrderFirst(tree)
 }
