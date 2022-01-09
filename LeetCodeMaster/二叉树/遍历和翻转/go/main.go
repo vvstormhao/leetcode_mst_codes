@@ -520,6 +520,31 @@ func CreateBinary(inOrder []int, postOrder []int) *TreeNode {
 	return rootNode
 }
 
+// 最大二叉树
+func MaxBinary(data []int) *TreeNode {
+	if len(data) == 0 {
+		return nil
+	}
+
+	var maxVal int
+	var maxIndex int
+	for k, v := range data {
+		if v > maxVal {
+			maxVal = v
+			maxIndex = k
+		}
+	}
+
+	root := &TreeNode{
+		Val : maxVal,
+	}
+
+	root.Left = MaxBinary(data[:maxIndex])
+	root.Right = MaxBinary(data[maxIndex+1:])
+
+	return root
+}
+
 // 判断是否为二叉搜索树
 // 二叉搜索树的最小绝对值差
 // 获取众数
@@ -567,9 +592,13 @@ func main() {
 	has := HasPathSum(tree1, 22)
 	fmt.Printf("has %v\n", has)
 
-	inOrder := []int{9,3,15,20,7}
-	postOrder := []int{9,15,7,20,3}
+	//inOrder := []int{9,3,15,20,7}
+	//postOrder := []int{9,15,7,20,3}
 
-	tree := CreateBinary(inOrder, postOrder)
+	//tree := CreateBinary(inOrder, postOrder)
+	//PrintOrderFirst(tree)
+
+	data := []int{3,2,1,6,0,5}
+	tree := MaxBinary(data)
 	PrintOrderFirst(tree)
 }
