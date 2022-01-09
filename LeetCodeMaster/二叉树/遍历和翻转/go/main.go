@@ -545,6 +545,22 @@ func MaxBinary(data []int) *TreeNode {
 	return root
 }
 
+func searchBST(node *TreeNode, target int) *TreeNode {
+	if node == nil {
+		return nil
+	}
+
+	if node.Val == target {
+		return node
+	}
+
+	if target > node.Val {
+		return searchBST(node.Right)
+	} else {
+		return searchBST(node.Left)
+	}
+}
+
 // 判断是否为二叉搜索树
 // 二叉搜索树的最小绝对值差
 // 获取众数
