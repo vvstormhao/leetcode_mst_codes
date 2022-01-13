@@ -563,8 +563,7 @@ func searchBST(node *TreeNode, target int) *TreeNode {
 
 // 判断是否为二叉搜索树
 // 二叉搜索树的最小绝对值差
-// 获取众数
-// 众数即出现频率最多的节点集合
+// 获取众数,众数即出现频率最多的节点集合
 // 获取公共祖先
 
 func main() {
