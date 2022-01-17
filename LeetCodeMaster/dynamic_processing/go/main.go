@@ -183,6 +183,28 @@ func IntegerBreak(n int) int {
 	return dp[n]
 }
 
+/*
+*不同的二叉树拆分
+给定一个整数 n，求以 1 ... n 为节点组成的二叉搜索树有多少种？
+
+*解题思路
+1.dp[i]含义：从0...i 为节点组成的二叉搜索树种类
+2.递推公式： dp[i] += dp[j - 1] * dp[i - j];
+3.初始化: dp[0] = 0
+*/
+func numTrees(n int) int {
+	dp := make([]int, n + 1)
+	dp[0] = 0
+
+	for i = 1;i <=n; i++ {
+		for j = 1; j <= i; j++ {
+			dp[i] += dp[j - 1] * dp[i - j]
+		}
+	}
+
+	return dp[n]
+}
+
 func main() {
 	result := fib(10)
 	fmt.Printf("result %d\n", result)
