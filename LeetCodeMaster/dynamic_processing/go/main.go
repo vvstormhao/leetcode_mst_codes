@@ -288,9 +288,6 @@ func BasicPackage01UsingJ(bagWeight int) {
 	fmt.Printf("final %v\n", dp)
 }
 
-
-
-
 /*
 分割等和子集
 给定一个只包含正整数的非空数组。是否可以将这个数组分割成两个子集，使得两个子集的元素和相等。
@@ -299,8 +296,37 @@ func BasicPackage01UsingJ(bagWeight int) {
 示例 2: 输入: [1, 2, 3, 5] 输出: false 解释: 数组不能分割成两个元素和相等的子集.
 
 * 解题思路
-
+先将数组中的元素排序，然后计算总和，总和/2即为背包的容量。物品重量和价值都是一样的。
 */
+
+func CanPartition(nums []int) bool {
+	var sum int
+	for _, v := range nums {
+		sum += v
+	}
+
+	var target int
+	if sum % 2 == 1 {
+		return false
+	}
+
+	target = sum / 2
+
+	dp := make([]int, target + 1)
+	dp[0] = 0
+
+	for i := 0; i < len(nums); i++ {
+		for j := target; j >= nums[i];j-- {
+			dp[j] = max(dp[j], dp[j-nums[i]] + nums[i])
+		}
+	}
+
+	if dp[target] == target {
+		return true
+	}
+
+	return false
+}
 
 func main() {
 	//result := fib(10)
