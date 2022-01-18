@@ -66,8 +66,8 @@ func getMaxClimbWay(n int) int {
 		return n
 	}
 
-	dp[1] == 1
-	dp[2] == 1
+	dp[1] = 1
+	dp[2] = 1
 	for i := 2; i <= n;i++ {
 		dp[i] = dp[i - 2] + dp[i - 1]
 	}
@@ -99,6 +99,13 @@ func getMaxClimbWay(n int) int {
 */
 func min(a, b int) int {
 	if a < b {
+		return a
+	}
+	return b
+}
+
+func max(a, b int) int {
+	if a > b {
 		return a
 	}
 	return b
@@ -196,8 +203,8 @@ func numTrees(n int) int {
 	dp := make([]int, n + 1)
 	dp[0] = 0
 
-	for i = 1;i <=n; i++ {
-		for j = 1; j <= i; j++ {
+	for i := 1;i <=n; i++ {
+		for j := 1; j <= i; j++ {
 			dp[i] += dp[j - 1] * dp[i - j]
 		}
 	}
@@ -205,7 +212,99 @@ func numTrees(n int) int {
 	return dp[n]
 }
 
+
+
+// 01背包问题
+/*
+* 标准的背包问题
+在下面的讲解中，我举一个例子：
+背包最大重量为4。
+物品为：
+重量	价值
+物品0	1	15
+物品1	3	20
+物品2	4	30
+问背包能背的物品最大价值是多少？
+
+*解题思路
+* dp[i][j]含义， 从0...i ，当背包的容量为j时，所能容纳的最大价值
+* 递推公式：dp[i][j] = max(dp[i-1][j], dp[i-1][j-weight[i]] + value[i])
+*/
+func BasicPackage01UsingIJ(bagWeight int) {
+	weight := []int{1,3,4}
+	value := []int{15, 20, 30}
+
+	dp := make([][]int, bagWeight + 1)
+	for i := 0;i < len(weight); i++ {
+		v := make([]int, bagWeight + 1)
+		dp = append(dp, v)
+	}
+
+	for j := weight[0]; j <= bagWeight; j++ {
+		dp[0][j] = value[0]
+	}
+
+	for i := 0;i <= len(weight);i++ {
+		dp[i][0] = 0
+	}
+
+	for i := 1;i <= len(weight);i++ {
+		for j := 1;j <= bagWeight; j++ {
+			if j < weight[i] {
+				dp[i][j] = dp[i - 1][j]
+			} else {
+				dp[i][j] = max(dp[i-1][j], dp[i-1][j-weight[i]] + value[i])
+			}
+		}
+	}
+
+	fmt.Printf("%v\n", dp)
+}
+
+/*
+* 01基础背包问题，通过滚动数组实现
+* 解题思路
+* dp[j]含义：当背包容量为j时，背包所装下物品的最大价值
+* 递推公式：dp[j] = max(dp[j], dp[j-weight[i]] + value[i])
+* 初始化：dp[0] = 0,共2层循环，外层循环为物品，内层循环为背包质量。内层循环背包质量从大到小遍历，目的是为了保证每个物品只被计算一次。
+*/
+
+func BasicPackage01UsingJ(bagWeight int) {
+	weight := []int{1,3,4}
+	value := []int{15, 20, 30}
+
+	dp := make([]int, bagWeight + 1)
+	for j := 0; j <= bagWeight; j++ {
+		dp[j] = 0
+	}
+
+	for i := 0; i < len(weight); i++ {
+		for j := bagWeight; j >= weight[i]; j-- {
+				dp[j] = max(dp[j], dp[j-weight[i]] + value[i])
+				fmt.Printf("weight[%d] = %d, dp[%d] = %d\n", i, weight[i], j, dp[j])
+		}
+	}
+
+	fmt.Printf("final %v\n", dp)
+}
+
+
+
+
+/*
+分割等和子集
+给定一个只包含正整数的非空数组。是否可以将这个数组分割成两个子集，使得两个子集的元素和相等。
+注意: 每个数组中的元素不会超过 100 数组的大小不会超过 200
+示例 1: 输入: [1, 5, 11, 5] 输出: true 解释: 数组可以分割成 [1, 5, 5] 和 [11].
+示例 2: 输入: [1, 2, 3, 5] 输出: false 解释: 数组不能分割成两个元素和相等的子集.
+
+* 解题思路
+
+*/
+
 func main() {
-	result := fib(10)
-	fmt.Printf("result %d\n", result)
+	//result := fib(10)
+	//fmt.Printf("result %d\n", result)
+
+	BasicPackage01UsingJ(7)
 }
